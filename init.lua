@@ -1001,6 +1001,42 @@ require('lazy').setup({
     --    - Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
     --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
   },
+  {
+    'epwalsh/obsidian.nvim',
+    version = '*',
+    lazy = true,
+    ft = 'markdown',
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+    },
+    opts = {
+
+      workspaces = {
+        {
+          name = 'Recherche_maison',
+          path = '~/Nextcloud/C et J/Habitation/Maison/obsidian_notes',
+        },
+        {
+          name = 'Personal_projects',
+          path = '~/Nextcloud/Temp/Obsidian/Personal_projects',
+        },
+        {
+          name = 'Work',
+          path = '~/Nextcloud/Documents/Travail/PBSC/Notes/obsidian_notes',
+        },
+      },
+
+      -- If Linux, use xdg-open to open links, if MacOS, use open
+      -- TODO: jacob Check if this works
+      open_fn = function(name)
+        local success = os.execute('xdg-open ' .. name)
+        if success then
+          return
+        end
+        os.execute('open ' .. name)
+      end,
+    },
+  },
 
   -- The following comments only work if you have downloaded the kickstart repo, not just copy pasted the
   -- init.lua. If you want these files, they are in the repository, so you can just download them and
