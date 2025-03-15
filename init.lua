@@ -100,7 +100,6 @@ vim.api.nvim_create_user_command('Wqa', 'wqa', {})
 -- Clear highlights on search when pressing <Esc> in normal mode
 --  See `:help hlsearch`
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
--- TODO: jacob Might want to replace with my own <C-c>.
 
 -- Diagnostic keymaps
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
@@ -181,7 +180,7 @@ require('lazy').setup({
   -- options to `gitsigns.nvim`.
   --
   -- See `:help gitsigns` to understand what the configuration keys do
-  { -- Adds git related signs to the gutter, as well as utilities for managing changes
+  { -- Adds git-related signs to the gutter, as well as utilities for managing changes
     'lewis6991/gitsigns.nvim',
     opts = {
       signs = {
@@ -767,7 +766,7 @@ require('lazy').setup({
         preset = 'default',
 
           -- Scroll the documentation window [b]ack / [f]orward
-          -- NOTE: jacob Those mappings (`<C-b>` and `<C-f>` to scrool back and forward the documentation window) are useful
+          -- NOTE: jacob Those mappings (`<C-b>` and `<C-f>` to scroll back and forward the documentation window) are useful
           ['<C-b>'] = cmp.mapping.scroll_docs(-4),
           ['<C-f>'] = cmp.mapping.scroll_docs(4),
 
