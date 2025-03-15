@@ -744,16 +744,33 @@ require('lazy').setup({
             lsp_format = 'fallback',
           }
         end
+        return {
+          timeout_ms = 5000,
+          lsp_format = lsp_format_opt,
+        }
       end,
       formatters_by_ft = {
         lua = { 'stylua' },
-        -- TODO: jacob Add Python formatter
-        -- Conform can also run multiple formatters sequentially
-        -- python = { "isort", "black" },
-        --
-        -- You can use 'stop_after_first' to run the first available formatter from the list
-        -- javascript = { "prettierd", "prettier", stop_after_first = true },
+        python = { 'black', 'ruff' },
       },
+      -- formatters = {
+      --   black = {
+      --     command = 'black',
+      --     args = { '--line-length', '120', '--target-version', 'py310', '-' },
+      --     stdin = true,
+      --   },
+      --   ruff = {
+      --     command = 'ruff',
+      --     args = { 'check', '--fix', '--select', 'D,N,YTT,T10,RSE,SLOT,TID,TCH,RUF006', '--ignore', 'D415,D107', '-' },
+      --     stdin = true,
+      --   },
+      -- TODO: jacob Add Python formatter
+      -- Conform can also run multiple formatters sequentially
+      -- python = { "isort", "black" },
+      --
+      -- You can use 'stop_after_first' to run the first available formatter from the list
+      -- javascript = { "prettierd", "prettier", stop_after_first = true },
+      -- },
     },
   },
 
