@@ -79,8 +79,23 @@ vim.o.scrolloff = 8
 -- See `:help 'confirm'`
 vim.o.confirm = true
 
+-- Add visual columns
+vim.opt.colorcolumn = '80'
+-- TODO: jacob Column at 50 char when doing commit messages and another at 72 chars
+
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
+
+-- Toggle spellchecking
+vim.keymap.set('n', '<leader>sc', ':setlocal spell!<CR>', { desc = 'Toggle [S]pell [C]hecker', noremap = true, silent = true })
+
+-- Allow capital letters in common commands
+vim.api.nvim_create_user_command('W', 'w', {})
+vim.api.nvim_create_user_command('Q', 'q', {})
+vim.api.nvim_create_user_command('Qa', 'qa', {})
+vim.api.nvim_create_user_command('Q', 'q<bang>', { bang = true }) -- The "bang" is the exclamation mark.
+vim.api.nvim_create_user_command('Wq', 'wq', {})
+vim.api.nvim_create_user_command('Wqa', 'wqa', {})
 
 -- Clear highlights on search when pressing <Esc> in normal mode
 --  See `:help hlsearch`
@@ -332,6 +347,14 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = '[S]earch [R]esume' })
       vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
       vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
+      vim.keymap.set('n', '<leader>sG', function()
+        local glob_pattern = vim.fn.input 'Glob pattern (e.g. `*.lua` or `!*test*`): '
+        builtin.live_grep {
+          additional_args = function(args)
+            return vim.list_extend(args, { '--glob', glob_pattern })
+          end,
+        }
+      end, { desc = '[S]earch by [G]rep with glob pattern' })
 
       -- Slightly advanced example of overriding default behavior and theme
       vim.keymap.set('n', '<leader>/', function()
@@ -437,6 +460,8 @@ require('lazy').setup({
           --  This is where a variable was first declared, or where a function is defined, etc.
           --  To jump back, press <C-t>.
           map('gd', require('telescope.builtin').lsp_definitions, '[G]oto [D]efinition')
+          vim.keymap.set('n', 'gvd', '<cmd>vs<CR><cmd>lua vim.lsp.buf.definition()<CR>')
+          vim.keymap.set('n', '<leader>gtd', '<cmd>vs<CR><cmd>lua vim.lsp.buf.definition()<CR><C-w>T')
 
           -- Find references for the word under your cursor.
           map('grr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
