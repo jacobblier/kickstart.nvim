@@ -190,6 +190,32 @@ require('lazy').setup({
         topdelete = { text = '‾' },
         changedelete = { text = '~' },
       },
+      on_attach = function(bufnr)
+        local gs = package.loaded.gitsigns
+        local function map(mode, lhs, rhs, opts)
+          opts = opts or {}
+          opts.buffer = bufnr
+          vim.keymap.set(mode, lhs, rhs, opts)
+        end
+
+        -- Stage hunk
+        map('n', '<Leader>hs', gs.stage_hunk)
+
+        -- Undo hunk
+        map('n', '<Leader>hu', gs.undo_stage_hunk)
+
+        -- Reset hunk (discard changes)
+        map('n', '<Leader>hd', gs.reset_hunk)
+
+        -- Go to next hunk
+        map('n', '<Leader>h)', gs.next_hunk)
+
+        -- Go to previous hunk
+        map('n', '<Leader>h(', gs.prev_hunk)
+
+        -- Preview hunk
+        map('n', '<Leader>hp', gs.preview_hunk)
+      end,
     },
   },
 
