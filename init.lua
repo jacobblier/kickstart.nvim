@@ -22,6 +22,17 @@ vim.o.mouse = 'a'
 -- Don't show the mode, since it's already in the status line
 vim.o.showmode = false
 
+-- Jump to the exact last cursor position when reopening a file
+vim.api.nvim_create_autocmd('BufReadPost', {
+  callback = function()
+    local last_pos = vim.fn.line '\'"'
+    local last_col = vim.fn.col '\'"'
+    if last_pos > 0 and last_pos <= vim.fn.line '$' then
+      vim.api.nvim_win_set_cursor(0, { last_pos, last_col - 1 })
+    end
+  end,
+})
+
 -- Sync clipboard between OS and Neovim.
 --  Schedule the setting after `UiEnter` because it can increase startup-time.
 --  Remove this option if you want your OS clipboard to remain independent.
