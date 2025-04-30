@@ -210,22 +210,22 @@ require('lazy').setup({
         end
 
         -- Stage hunk
-        map('n', '<Leader>hs', gs.stage_hunk)
+        map('n', '<Leader>hs', gs.stage_hunk, { desc = '[h]unk [s]tage' })
 
         -- Undo hunk
-        map('n', '<Leader>hu', gs.undo_stage_hunk)
+        map('n', '<Leader>hu', gs.undo_stage_hunk, { desc = '[h]unk [u]ndo' })
 
         -- Reset hunk (discard changes)
-        map('n', '<Leader>hd', gs.reset_hunk)
+        map('n', '<Leader>hd', gs.reset_hunk, { desc = '[h]unk [d]iscard' })
 
         -- Go to next hunk
-        map('n', '<Leader>h)', gs.next_hunk)
+        map('n', '<Leader>h)', gs.next_hunk, { desc = '[h]unk next[)]' })
 
         -- Go to previous hunk
-        map('n', '<Leader>h(', gs.prev_hunk)
+        map('n', '<Leader>h(', gs.prev_hunk, { desc = '[h]unk previous[(]' })
 
         -- Preview hunk
-        map('n', '<Leader>hp', gs.preview_hunk)
+        map('n', '<Leader>hp', gs.preview_hunk, { desc = '[h]unk [p]review' })
       end,
     },
   },
