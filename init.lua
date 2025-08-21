@@ -440,10 +440,14 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
       vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
       vim.keymap.set('n', '<leader>sG', function()
-        local glob_pattern = vim.fn.input 'Glob pattern (e.g. `*.lua` or `!*test*`): '
+        local glob_patterns = vim.fn.input 'Comma-seprated glob pattern (e.g. `*.lua,!*test*`): '
+        local glob_args = {}
+        for pattern in glob_patterns:gmatch '[^,]+' do
+          table.insert(glob_args, '--glob=' .. pattern)
+        end
         builtin.live_grep {
           additional_args = function(args)
-            return vim.list_extend(args, { '--glob', glob_pattern })
+            return vim.list_extend(glob_args, args)
           end,
         }
       end, { desc = '[S]earch by [G]rep with glob pattern' })
