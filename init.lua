@@ -138,6 +138,14 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 })
 -- NOTE: jacob Not sure how useful the highlight on yank is.
 
+-- Automatically set conceallevel to 2 when editing a markdown file
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = { 'markdown' },
+  callback = function()
+    vim.opt_local.conceallevel = 2
+  end,
+})
+
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
