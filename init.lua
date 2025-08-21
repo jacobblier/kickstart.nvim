@@ -973,25 +973,8 @@ require('lazy').setup({
       -- TODO: jacob Study this sub-plugin
       require('mini.surround').setup()
 
-      -- Simple and easy statusline.
-      --  You could remove this setup call if you don't like it,
-      --  and try some other statusline plugin
-      -- TODO: jacob Study this sub-plugin and see what other options are available.
-      local statusline = require 'mini.statusline'
-      -- set use_icons to true if you have a Nerd Font
-      statusline.setup { use_icons = vim.g.have_nerd_font }
-
-      -- You can configure sections in the statusline by overriding their
-      -- default behavior. For example, here we set the section for
-      -- cursor location to LINE:COLUMN
-      ---@diagnostic disable-next-line: duplicate-set-field
-      statusline.section_location = function()
-        return '%2l:%-2v'
-      end
-
-      -- ... and there is more!
-      --  TODO: jacob Check https://github.com/echasnovski/mini.nvim
-      --  Check out: https://github.com/echasnovski/mini.nvim
+      -- Simple and easy statusline, customized by me
+      require 'config.statusline'
     end,
   },
   { -- Highlight, edit, and navigate code
@@ -1106,6 +1089,20 @@ require('lazy').setup({
     },
   },
 })
+
+-- Define custom highlight groups for the status line
+vim.api.nvim_set_hl(0, 'MiniStatuslineFilename', { fg = '#627072', bg = '#151b1e' })
+vim.api.nvim_set_hl(0, 'MiniStatuslineDiagnostics', { fg = '#abbab9', bg = '#151b1e' })
+vim.api.nvim_set_hl(0, 'MiniStatuslineSeparator', { fg = '#abbab9', bg = '#151b1e' })
+vim.api.nvim_set_hl(0, 'MiniStatuslineGitBranch', { fg = '#627072', bg = '#151b1e' })
+vim.api.nvim_set_hl(0, 'MiniStatuslineGitHash', { fg = '#515657', bg = '#151b1e' })
+vim.api.nvim_set_hl(0, 'MiniStatuslinePythonEnv', { fg = '#6d6c61', bg = '#151b1e' })
+vim.api.nvim_set_hl(0, 'MiniStatuslineSyntax', { fg = '#abbab9', bg = '#151b1e' })
+vim.api.nvim_set_hl(0, 'MiniStatusLinePositionNormal', { fg = '#151b1e', bg = '#8de76c' })
+vim.api.nvim_set_hl(0, 'MiniStatusLinePositionInsert', { fg = '#151b1e', bg = '#ffec58' })
+vim.api.nvim_set_hl(0, 'MiniStatusLinePositionVisual', { fg = '#151b1e', bg = '#58f7ff' })
+vim.api.nvim_set_hl(0, 'MiniStatusLinePositionVisualLine', { fg = '#151b1e', bg = '#58f7ff' })
+vim.api.nvim_set_hl(0, 'MiniStatusLinePositionCommand', { fg = '#151b1e', bg = '#f23434' })
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
