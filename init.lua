@@ -346,6 +346,8 @@ require('lazy').setup({
       -- Document existing key chains
       spec = {
         { '<leader>s', group = '[S]earch' },
+        { '<leader>sg', group = '[S]earch [G]it' },
+        { '<leader>w', group = '[W]orkspace' },
         { '<leader>t', group = '[T]oggle' },
         { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
       },
@@ -478,6 +480,116 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>sn', function()
         builtin.find_files { cwd = vim.fn.stdpath 'config' }
       end, { desc = '[S]earch [N]eovim files' })
+
+      -- Git-related telescope pickers
+      local search_git_diff_content = function()
+        -- Function to search within git hunks content
+        local pickers = require 'telescope.pickers'
+        local finders = require 'telescope.finders'
+        local conf = require('telescope.config').values
+        local actions = require 'telescope.actions'
+        local action_state = require 'telescope.actions.state'
+
+        -- Get git diff output (include staged and unstaged changes)
+        local cmd = { 'git', 'diff', '--no-color', '--unified=3', 'HEAD' }
+        local results = vim.fn.systemlist(cmd)
+
+        if vim.v.shell_error ~= 0 then
+          vim.notify('Error running git diff: ' .. table.concat(results, '\n'), vim.log.levels.ERROR)
+          return
+        end
+
+        if #results == 0 then
+          vim.notify('No git changes found to search', vim.log.levels.WARN)
+          return
+        end
+
+        -- Simple approach: treat each diff line as a searchable entry
+        local entries = {}
+        local current_file = ''
+        local line_num = 0
+
+        for _, line in ipairs(results) do
+          if line:match '^%+%+%+ b/' then
+            current_file = line:match '^%+%+%+ b/(.+)$' or ''
+          elseif line:match '^@@' then
+            line_num = line:match '@@ %-%d+,%d+ %+(%d+)' or '0'
+          elseif line:match '^[%+%-]' and not line:match '^[%+%-][%+%-][%+%-]' then
+            -- This is an actual change line (+ or -)
+            local change_type = line:sub(1, 1) == '+' and 'Added' or 'Removed'
+            local content = line:sub(2) -- Remove the +/- prefix
+
+            table.insert(entries, {
+              file = current_file,
+              line_num = line_num,
+              change_type = change_type,
+              content = content,
+              full_line = line,
+              display = string.format('%s:%s [%s] %s', current_file, line_num, change_type, content:sub(1, 60)),
+            })
+          end
+        end
+
+        if #entries == 0 then
+          vim.notify('No searchable changes found in git diff', vim.log.levels.WARN)
+          return
+        end
+
+        pickers
+          .new({}, {
+            prompt_title = 'Search Git Diff Content (' .. #entries .. ' changes)',
+            finder = finders.new_table {
+              results = entries,
+              entry_maker = function(entry)
+                return {
+                  value = entry,
+                  display = entry.display,
+                  ordinal = entry.content, -- Search within the actual content
+                }
+              end,
+            },
+            sorter = conf.generic_sorter {},
+            previewer = require('telescope.previewers').new_buffer_previewer {
+              title = 'Change Context',
+              define_preview = function(self, entry)
+                -- Show the context around this change
+                local lines = {
+                  'File: ' .. entry.value.file,
+                  'Line: ' .. entry.value.line_num,
+                  'Type: ' .. entry.value.change_type,
+                  '',
+                  'Change:',
+                  entry.value.full_line,
+                }
+                vim.api.nvim_buf_set_lines(self.state.bufnr, 0, -1, false, lines)
+                vim.bo[self.state.bufnr].filetype = 'diff'
+              end,
+            },
+            attach_mappings = function(prompt_bufnr)
+              actions.select_default:replace(function()
+                local entry = action_state.get_selected_entry()
+                actions.close(prompt_bufnr)
+
+                -- Open the file
+                if entry.value.file and entry.value.file ~= '' then
+                  vim.cmd('edit ' .. entry.value.file)
+                  local line_number = tonumber(entry.value.line_num) or 1
+                  vim.api.nvim_win_set_cursor(0, { line_number, 0 })
+                end
+              end)
+              return true
+            end,
+          })
+          :find()
+      end
+
+      vim.keymap.set('n', '<leader>sgc', builtin.git_commits, { desc = '[S]earch [G]it [C]ommits' })
+      vim.keymap.set('n', '<leader>sgb', builtin.git_bcommits, { desc = '[S]earch [G]it [B]uffer commits' })
+      vim.keymap.set('n', '<leader>sgs', builtin.git_status, { desc = '[S]earch [G]it [S]tatus (changed files)' })
+      vim.keymap.set('n', '<leader>sgf', builtin.git_files, { desc = '[S]earch [G]it [F]iles' })
+      vim.keymap.set('n', '<leader>sgr', builtin.git_branches, { desc = '[S]earch [G]it b[R]anches' })
+      vim.keymap.set('n', '<leader>sgh', builtin.git_stash, { desc = '[S]earch [G]it stash ([H]idden changes)' })
+      vim.keymap.set('n', '<leader>sgd', search_git_diff_content, { desc = '[S]earch [G]it [D]iff content (inside hunks)' })
     end,
   },
 
