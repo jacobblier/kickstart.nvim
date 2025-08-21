@@ -561,7 +561,7 @@ require('lazy').setup({
           --  To jump back, press <C-t>.
           map('gd', require('telescope.builtin').lsp_definitions, '[G]oto [D]efinition')
           vim.keymap.set('n', 'gvd', '<cmd>vs<CR><cmd>lua vim.lsp.buf.definition()<CR>')
-          vim.keymap.set('n', '<leader>gtd', '<cmd>vs<CR><cmd>lua vim.lsp.buf.definition()<CR><C-w>T')
+          vim.keymap.set('n', '<leader>gtd', '<cmd>tab split | lua vim.lsp.buf.definition()<CR>')
 
           -- Find references for the word under your cursor.
           map('grr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
