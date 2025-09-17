@@ -910,6 +910,7 @@ require('lazy').setup({
       formatters_by_ft = {
         lua = { 'stylua' },
         python = { 'black', 'ruff' },
+        css = { 'prettier' },
       },
       -- formatters = {
       --   black = {
