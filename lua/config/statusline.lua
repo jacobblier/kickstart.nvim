@@ -52,6 +52,9 @@ end
 local function get_git_branch()
   local git_cmd_branch = 'git -C ' .. vim.fn.expand '%:p:h' .. ' branch --show-current'
   local branch_name = vim.fn.system(git_cmd_branch):gsub('\n', '')
+  if vim.v.shell_error ~= 0 then
+    return 'Not in a git repo'
+  end
   return (branch_name and branch_name ~= '') and string.format(' %s', branch_name) or ''
 end
 
@@ -59,6 +62,9 @@ end
 local function get_git_hash()
   local git_cmd_hash = 'git -C ' .. vim.fn.expand '%:p:h' .. ' log --format=%h -1'
   local hash = vim.fn.system(git_cmd_hash):gsub('\n', '')
+  if vim.v.shell_error ~= 0 then
+    return ''
+  end
   return (hash and hash ~= '') and string.format(' %s', hash) or ''
 end
 
