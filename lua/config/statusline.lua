@@ -180,7 +180,11 @@ statusline.setup {
 
       return statusline_cache[bufnr] or get_statusline_content()
     end,
-    inactive = nil, -- Use default intactive content
+    inactive = function()
+      local filepath = vim.fn.expand '%:.' or ''
+      local modified_status = vim.bo.modified and '[+]' or ''
+      return string.format(' %s%s ', filepath, modified_status)
+    end,
   },
 }
 
