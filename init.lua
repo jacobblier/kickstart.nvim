@@ -825,7 +825,6 @@ require('lazy').setup({
       -- TODO: jacob Add desired LSPs
       -- TODO: jacob See which Python LSP is the most desirable (see list with `:Mason`
       local servers = {
-        clangd = {},
         -- gopls = {},
         -- pyright = {},
         -- rust_analyzer = {},
@@ -837,7 +836,11 @@ require('lazy').setup({
         -- But for many setups, the LSP (`ts_ls`) will work just fine
         -- ts_ls = {},
         --
-
+        bashls = {},
+        clangd = {},
+        cssls = {},
+        -- eslint = {},
+        jedi_language_server = {},
         lua_ls = {
           -- cmd = { ... },
           -- filetypes = { ... },
@@ -852,6 +855,7 @@ require('lazy').setup({
             },
           },
         },
+        rust_analyzer = {},
       }
 
       -- Ensure the servers and tools above are installed
