@@ -453,6 +453,14 @@ require('lazy').setup({
           end,
         }
       end, { desc = '[S]earch by [G]rep with glob pattern' })
+      vim.keymap.set('n', '<leader>st', function()
+        local builtin = require 'telescope.builtin'
+        builtin.live_grep {
+          additional_args = function(args)
+            return vim.list_extend({ '--glob=!*cross-*', '--glob=!.*cross-*', '--glob=!*test*', '--glob=!.*test*' }, args)
+          end,
+        }
+      end, { desc = '[S]earch by grep excluding [T]est files and cross-compile-environment' })
 
       -- Slightly advanced example of overriding default behavior and theme
       vim.keymap.set('n', '<leader>/', function()
