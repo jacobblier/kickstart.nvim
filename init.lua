@@ -715,7 +715,8 @@ require('lazy').setup({
           -- Show the hover information for the word under your cursor.
           -- Hover information is the little popup that shows you the type of a variable,
           -- or the signature of a function, etc.
-          map('<leader>h', vim.lsp.buf.hover, '[H]over')
+          -- We do not use `<leader>h` here, because it interferes with the Git hunk shortcuts.
+          map('K', vim.lsp.buf.hover, 'Hover')
 
           -- Open code action window for the word under your cursor.
           --  Code actions are things like "add missing import", "rename variable", etc.
