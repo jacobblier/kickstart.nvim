@@ -1216,5 +1216,9 @@ vim.api.nvim_set_hl(0, 'MiniStatusLinePositionVisual', { fg = '#151b1e', bg = '#
 vim.api.nvim_set_hl(0, 'MiniStatusLinePositionVisualLine', { fg = '#151b1e', bg = '#58f7ff' })
 vim.api.nvim_set_hl(0, 'MiniStatusLinePositionCommand', { fg = '#151b1e', bg = '#f23434' })
 
+-- Set the colors for the search matches
+vim.api.nvim_set_hl(0, 'Search', { fg = '#151b1e', bg = '#cfcfcf', bold = true })
+vim.api.nvim_set_hl(0, 'IncSearch', { fg = '#151b1e', bg = '#ffec58', bold = true })
+
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
