@@ -1186,6 +1186,9 @@ require('lazy').setup({
   },
 })
 
+-- Load custom LSP configurations
+require 'config.lsp'
+
 -- Define custom highlight groups for the status line
 vim.api.nvim_set_hl(0, 'MiniStatuslineFilename', { fg = '#627072', bg = '#151b1e' })
 vim.api.nvim_set_hl(0, 'MiniStatuslineDiagnostics', { fg = '#abbab9', bg = '#151b1e' })
