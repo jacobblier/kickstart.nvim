@@ -1089,7 +1089,14 @@ require('lazy').setup({
   { -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
-    main = 'nvim-treesitter.configs', -- Sets main module to use for opts
+    -- TODO: Only use `nvim-treesitter.config` once MacOS's version of nvim-treesitter is updated and uses the newest config name convention. See with `ls ~/.local/share/nvim/lazy/nvim-treesitter/lua/nvim-treesitter/`.
+    config = function(_, opts)
+      local ok, ts = pcall(require, 'nvim-treesitter.config')
+      if not ok then
+        ts = require 'nvim-treesitter.configs'
+      end
+      ts.setup(opts)
+    end,
     -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
     opts = {
       -- TODO: jacob Update this list with the languages I really want.
